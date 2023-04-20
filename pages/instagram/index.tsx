@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Skeleton from '../../components/Skeleton'
 
 function Instagram() {
   const [imageUrl, setImageUrl] = useState("");
@@ -25,27 +24,35 @@ function Instagram() {
             Generate your next IG caption using chatGPT
           </h1>
         </main>
-        <br/>
-        <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
-        {isLoading ? (
-            <Skeleton width={250} height={300} />
-          ) : (
-            <div className="mt-5">
-              <img src={imageUrl} alt="Uploaded Image" width="300" />
-            </div>
-          )}
-        
-          <label className="text-slate-500 mt-5" htmlFor="image-upload">
-            Upload Image:{" "}
-            <input
-              className="text-slate-500 mt-5"
-              type="file"
-              id="image-upload"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-          </label>
-          </div>
+        <br />
+
+        <div className="flex items-center justify-center w-full">
+
+    <label
+      htmlFor="dropzone-file"
+      className="flex flex-col items-center justify-center w-full h-96 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+    >
+      <img
+        src={imageUrl || "/upload.svg"}
+        alt="Upload file"
+        className="h-2/3 mb-3 text-gray-400"
+      />
+      <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+        <span className="font-semibold">Click to upload</span> or drag and drop
+      </p>
+      <p className="text-xs text-gray-500 dark:text-gray-400">
+        SVG, PNG, JPG or GIF (MAX. 800x400px)
+      </p>
+      <input
+        id="dropzone-file"
+        type="file"
+        className="hidden"
+        onChange={handleImageChange}
+      />
+    </label>
+</div>
+
+
         {/* More content here */}
       </div>
     </div>
