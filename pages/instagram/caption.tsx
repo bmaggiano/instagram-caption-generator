@@ -1,3 +1,5 @@
+import Head from "next/head";
+import Header from "../../components/Header";
 import React, { useState, useEffect } from "react";
 
 function Caption() {
@@ -17,8 +19,16 @@ function Caption() {
   }, [imageUrl]);
 
   return (
-    <div>
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 mb-10 sm:mt-20">
+    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+      <Head>
+      <title>Instagram Caption Generator</title>
+      <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <Header/>
+
+
+      <main className="flex mt-10 mb-10 w-full flex-col items-center justify-center text-center px-4">
           <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
             Generate your next IG caption using chatGPT
           </h1>
@@ -26,7 +36,7 @@ function Caption() {
       <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
       
 
-        <div className="mt-3 flex items-center justify-center w-full">
+        <div className="flex items-center justify-center w-full">
           <img
             src={imageUrl}
             alt="Uploaded file"

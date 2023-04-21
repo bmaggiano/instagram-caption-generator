@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Head from "next/head";
+import Header from "../../components/Header";
 import Link from "next/link";
 
 function Instagram() {
@@ -33,6 +35,13 @@ function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
+    <Head>
+    <title>Instagram Image Upload</title>
+    <link rel="icon" href="/favicon.ico" />
+    </Head>
+
+    <Header />
+
       <div>
         <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
           <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
