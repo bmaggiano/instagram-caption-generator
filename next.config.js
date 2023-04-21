@@ -15,4 +15,8 @@ module.exports = {
       },
     ];
   },
+  serverRuntimeConfig: {
+    // This sets the maximum size of HTTP headers to 64KB
+    maxHttpHeaderSize: 64 * 1024,
+  },
 };

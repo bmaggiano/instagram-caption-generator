@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 function Instagram() {
@@ -6,18 +6,30 @@ function Instagram() {
   const [isLoading, setIsLoading] = useState(true);
   const [captionLink, setCaptionLink] = useState(false);
 
-  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImageUrl(reader.result as string);
-        setIsLoading(false);
-      };
-      reader.readAsDataURL(file);
-      setCaptionLink(true);
-    }
+useEffect(() => {
+  const imageUrlFromStorage = localStorage.getItem("imageUrl");
+  if (imageUrlFromStorage) {
+    setImageUrl(imageUrlFromStorage);
+    setIsLoading(false);
+    setCaptionLink(true);
   }
+}, []);
+
+
+function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const file = event.target.files?.[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageUrl(reader.result as string);
+      setIsLoading(false);
+      setCaptionLink(true);
+      localStorage.setItem("imageUrl", reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
