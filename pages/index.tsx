@@ -25,14 +25,36 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". ${
-    vibe === "Funny"
-      ? "Make sure there is a joke in there and it's a little ridiculous."
-      : null
-  }
-      Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
-    bio.slice(-1) === "." ? "" : "."
-  }`;
+  // const prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". ${
+  //   vibe === "Funny"
+  //     ? "Make sure there is a joke in there and it's a little ridiculous."
+  //     : null
+  // }
+  //     Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
+  //   bio.slice(-1) === "." ? "" : "."
+  // }`;
+
+  let prompt: string;
+
+switch(vibe) {
+  case "Lebron":
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Tweet like NBA player Lebron James tweets, he loves his emojis too. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    break;
+  case "Professional":
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    break;
+  case "Funny":
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Inject humor into your biographies and make them memorable. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    break;
+  case "Casual":
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Use a relaxed and informal tone, and showcase your interests and personality. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    break;
+  case "Donald Trump":
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    break;
+  default:
+    prompt = `Invalid vibe type. Please choose a vibe type.`;
+}
 
   const generateBio = async (e: any) => {
     e.preventDefault();

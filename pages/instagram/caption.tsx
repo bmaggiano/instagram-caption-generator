@@ -1,8 +1,10 @@
 import Head from "next/head";
+import CelebDropDown, { VibeType } from "../../components/CelebDropDown"
 import Header from "../../components/Header";
 import React, { useState, useEffect } from "react";
 
 function Caption() {
+  const [vibe, setVibe] = useState<VibeType>("Professional");
   const [bio, setBio] = useState("");
 
   const [imageUrl, setImageUrl] = useState(
@@ -83,6 +85,14 @@ function Caption() {
             }
           />
       </div>
+
+      <div className="flex mb-5 items-center space-x-3">
+            <p className="text-left font-medium">Select your vibe or celebrity.</p>
+          </div>
+          <div className="block">
+            <CelebDropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
+          </div>
+
       <button className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80">
         Generate Caption
         </button>
