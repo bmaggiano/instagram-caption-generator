@@ -29,8 +29,8 @@ function Caption() {
 
 
       <main className="flex mt-10 mb-10 w-full flex-col items-center justify-center text-center px-4">
-          <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-            Generate your next IG caption using chatGPT
+          <h1 className="sm:text-6xl sm:leading-snug text-4xl max-w-[708px] font-bold text-slate-900">
+            Use AI to generate your IG Caption
           </h1>
         </main>
       <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
