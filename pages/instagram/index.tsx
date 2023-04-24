@@ -2,14 +2,17 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Header from "../../components/Header";
 import Link from "next/link";
+import CelebDropDown, { VibeType } from "../../components/CelebDropDown";
 import LoadingDots from "../../components/LoadingDots";
 
 function Instagram() {
+  const [vibe, setVibe] = useState<VibeType>("Funny");
+  const [igCaption, setIgCaption] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [captionLink, setCaptionLink] = useState(false);
-  const [caption, setCaption] = useState(null);
+  const [picCaption, setPicCaption] = useState(null);
 
   useEffect(() => {
     const imageUrlFromStorage = localStorage.getItem("imageUrl");
@@ -55,7 +58,7 @@ function Instagram() {
 
       const res = await fetch("/api/replicate", requestOptions);
       const json = await res.json();
-      setCaption(json.caption);
+      setPicCaption(json.caption);
       setLoading(false);
     }
   }
@@ -116,8 +119,18 @@ function Instagram() {
             >
               Generate picture description &rarr;
             </button>
-            <br/>
-            {caption && <span>{caption}</span>}
+            <br />
+            {picCaption && (
+              <>
+                <div className="border-gray-300 bg-white text-gray-600 shadow-md px-4 py-2 rounded-xl transition-colors hover:bg-gray-100 mb-5 cursor-pointer">
+                  <span className="flex mb-2 font-bold justify-center">
+                    {" "}
+                    Generated description:{" "}
+                  </span>
+                  <span>{picCaption}</span>
+                </div>
+              </>
+            )}
           </div>
         )}
         {loading && (
@@ -130,6 +143,38 @@ function Instagram() {
             </button>
           </div>
         )}
+
+        <div className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
+          <div className="max-w-xl w-full">
+            <div className="flex mt-10 items-center space-x-3">
+              <p className="text-left font-medium">
+                Copy your current bio{" "}
+                <span className="text-slate-500">
+                  (or write a few sentences about yourself)
+                </span>
+                .
+              </p>
+            </div>
+            <textarea
+              value={igCaption}
+              onChange={(e) => setIgCaption(e.target.value)}
+              rows={4}
+              className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
+              placeholder={
+                "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
+              }
+            />
+            <div className="flex mb-5 items-center space-x-3">
+              <p className="text-left font-medium">Select your vibe.</p>
+            </div>
+            <div className="block">
+              <CelebDropDown
+                vibe={vibe}
+                setVibe={(newVibe) => setVibe(newVibe)}
+              />
+            </div>
+          </div>
+        </div>
 
         {/* More content here */}
       </div>
