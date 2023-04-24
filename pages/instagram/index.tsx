@@ -7,6 +7,9 @@ import LoadingDots from "../../components/LoadingDots";
 
 function Instagram() {
   const [vibe, setVibe] = useState<VibeType>("Funny");
+  const [bio, setBio] = useState("");
+  const [generatedBios, setGeneratedBios] = useState<String>("");
+
   const [igCaption, setIgCaption] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,6 +65,71 @@ function Instagram() {
       setLoading(false);
     }
   }
+
+  let prompt: string;
+
+switch(vibe) {
+  case "Lebron":
+    let tweets = [
+      "PHONE DOWN, but I'm UPGRADING! 📱💥💸. Who knew a penny could pack a punch?! Time to level up and get that shiny new tech! LIVE.LAUGH.LOVE #newphonevibes📱 #pennypower💪 #upgradeyourlife🚀 #techsavvy🤓",
+      "SINGLE and THRIVING, but where's the LOVE?! 🤔🤔🤔🤔🕺🏾. Keep swiping right and shooting your shot! The dating game is a wild ride, no doubt. LIVE.LAUGH.LOVE #searchingfortheone🔍 #singlesquad🙌 #heartseeker💘 #lovewarrior🛡️"
+    ];
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Tweet like NBA player Lebron James tweets, he loves his emojis too. Also, here's 2 examples of Lebron's tweets, to base future tweets off of: ${tweets[0]} and ${tweets[1]}. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    break;
+  case "Professional":
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    break;
+  case "Funny":
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Inject humor into your biographies and make them memorable. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    break;
+  case "Casual":
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Use a relaxed and informal tone, and showcase your interests and personality. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    break;
+  // case "Donald Trump":
+  //   prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+  //   break;
+  default:
+    prompt = `Invalid vibe type. Please choose a vibe type.`;
+}
+
+  const generateBio = async (e: any) => {
+    e.preventDefault();
+    setGeneratedBios("");
+    setLoading(true);
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    // This data is a ReadableStream
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setGeneratedBios((prev) => prev + chunkValue);
+    }
+    // scrollToBios();
+    setLoading(false);
+    console.log(generatedBios)
+  };
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
@@ -176,6 +244,28 @@ function Instagram() {
           </div>
         </div>
 
+        {!loading && (
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              onClick={(e) => generateBio(e)}
+            >
+              Generate your bio &rarr;
+            </button>
+          )}
+          {loading && (
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              disabled
+            >
+              <LoadingDots color="white" style="large" />
+            </button>
+          )}
+
+          {generatedBios && (
+            <div>
+              <span>{generatedBios}</span>
+            </div>
+          )}
         {/* More content here */}
       </div>
     </div>
