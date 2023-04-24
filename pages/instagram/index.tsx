@@ -2,45 +2,72 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Header from "../../components/Header";
 import Link from "next/link";
+import LoadingDots from "../../components/LoadingDots";
 
 function Instagram() {
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [captionLink, setCaptionLink] = useState(false);
+  const [caption, setCaption] = useState(null);
 
-useEffect(() => {
-  const imageUrlFromStorage = localStorage.getItem("imageUrl");
-  if (imageUrlFromStorage) {
-    setImageUrl(imageUrlFromStorage);
-    setIsLoading(false);
-    setCaptionLink(true);
-  }
-}, []);
-
-
-function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
-  const file = event.target.files?.[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImageUrl(reader.result as string);
+  useEffect(() => {
+    const imageUrlFromStorage = localStorage.getItem("imageUrl");
+    console.log({ imageUrlFromStorage });
+    if (imageUrlFromStorage) {
+      setImageUrl(imageUrlFromStorage);
       setIsLoading(false);
       setCaptionLink(true);
-      localStorage.setItem("imageUrl", reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  }
-}
+    }
+  }, []);
 
+  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageUrl(reader.result as string);
+        setIsLoading(false);
+        setCaptionLink(true);
+        localStorage.setItem("imageUrl", reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async function handleImageUploadAndGenerateCaption() {
+    setLoading(true);
+
+    if (imageUrl) {
+      const data = {
+        input: {
+          image: imageUrl,
+        },
+      };
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+
+      const res = await fetch("/api/replicate", requestOptions);
+      const json = await res.json();
+      setCaption(json.caption);
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
-    <Head>
-    <title>Instagram Image Upload</title>
-    <link rel="icon" href="/favicon.ico" />
-    </Head>
+      <Head>
+        <title>Instagram Image Upload</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-    <Header />
+      <Header />
 
       <div>
         <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
@@ -73,22 +100,37 @@ function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
             <input
               id="dropzone-file"
               type="file"
+              accept="image/*"
               className="hidden"
+              max-file-size="800000"
               onChange={handleImageChange}
             />
           </label>
         </div>
-        {captionLink && (
-          <div className="mt-3 flex items-center justify-center w-full">
-            <Link
-              className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
-              href="/instagram/caption"
-              rel="noopener noreferrer"
+
+        {!loading && captionLink && imageUrl && (
+          <div className="mt-3 flex flex-col items-center justify-center w-full">
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              onClick={(e) => handleImageUploadAndGenerateCaption()}
             >
-              <p>Go To Caption Generator</p>
-            </Link>
+              Generate picture description &rarr;
+            </button>
+            <br/>
+            {caption && <span>{caption}</span>}
           </div>
         )}
+        {loading && (
+          <div className="mt-3 flex flex-col items-center justify-center w-full">
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              disabled
+            >
+              <LoadingDots color="white" style="large" />
+            </button>
+          </div>
+        )}
+
         {/* More content here */}
       </div>
     </div>

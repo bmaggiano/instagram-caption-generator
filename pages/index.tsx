@@ -38,7 +38,11 @@ const Home: NextPage = () => {
 
 switch(vibe) {
   case "Lebron":
-    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Tweet like NBA player Lebron James tweets, he loves his emojis too. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
+    let tweets = [
+      "PHONE DOWN, but I'm UPGRADING! 📱💥💸. Who knew a penny could pack a punch?! Time to level up and get that shiny new tech! LIVE.LAUGH.LOVE #newphonevibes📱 #pennypower💪 #upgradeyourlife🚀 #techsavvy🤓",
+      "SINGLE and THRIVING, but where's the LOVE?! 🤔🤔🤔🤔🕺🏾. Keep swiping right and shooting your shot! The dating game is a wild ride, no doubt. LIVE.LAUGH.LOVE #searchingfortheone🔍 #singlesquad🙌 #heartseeker💘 #lovewarrior🛡️"
+    ];
+    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Tweet like NBA player Lebron James tweets, he loves his emojis too. Also, here's 2 examples of Lebron's tweets, to base future tweets off of: ${tweets[0]} and ${tweets[1]}. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
     break;
   case "Professional":
     prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;

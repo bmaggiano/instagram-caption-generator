@@ -1,4 +1,6 @@
 import { OpenAIStream, OpenAIStreamPayload } from "../../utils/OpenAIStream";
+//analyze image via endpoint sid sent on slack
+
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
