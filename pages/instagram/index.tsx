@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import Header from "../../components/Header";
 import Link from "next/link";
+import { Toaster, toast } from "react-hot-toast";
 import CelebDropDown, { VibeType } from "../../components/CelebDropDown";
 import LoadingDots from "../../components/LoadingDots";
 import Footer from "../../components/Footer";
@@ -42,6 +43,14 @@ function Instagram() {
     }
   }
 
+  const bioRef = useRef<null | HTMLDivElement>(null);
+
+  const scrollToBios = () => {
+    if (bioRef.current !== null) {
+      bioRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   async function handleImageUploadAndGenerateCaption() {
     setLoading(true);
 
@@ -81,27 +90,27 @@ function Instagram() {
         lebroncaptions[0]
       } and ${
         lebroncaptions[1]
-      }. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+      }. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
     case "Professional":
-      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
     case "Funny":
-      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Inject humor into your captions and make them memorable. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Inject humor into your captions and make them memorable. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
     case "Casual":
-      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a relaxed and informal tone, and showcase your interests and personality. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a relaxed and informal tone, and showcase your interests and personality. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
     case "Donald Trump":
-      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
@@ -207,7 +216,7 @@ function Instagram() {
             <br />
             {picCaption && (
               <>
-                <div className="border-gray-300 bg-white text-gray-600 shadow-md px-4 py-2 rounded-xl transition-colors hover:bg-gray-100 mb-5 cursor-pointer">
+                <div className="border-gray-300 bg-white text-gray-600 shadow-md px-4 py-2 rounded-xl transition-colors hover:bg-gray-100 cursor-pointer">
                   <span className="flex mb-2 font-bold justify-center">
                     {" "}
                     Generated description:{" "}
@@ -229,7 +238,7 @@ function Instagram() {
           </div>
         )}
 
-        <div className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
+        <div className="flex flex-1 w-full flex-col items-center justify-center text-center px-4">
           <div className="max-w-xl w-full">
             <div className="flex mt-10 items-center space-x-3">
               <p className="text-left font-medium">
@@ -282,15 +291,21 @@ function Instagram() {
           </div>
         )}
 
+<Toaster
+          position="top-center"
+          reverseOrder={false}
+          toastOptions={{ duration: 2000 }}
+        />
+
         <div className="space-y-10 my-10">
           {generatedCaptions && (
             <>
               <div>
                 <h2
                   className="text-center sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                  // ref={bioRef}
+                  ref={bioRef}
                 >
-                  Your generated CapgeneratedCaptions
+                  Your generated captions
                 </h2>
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
@@ -301,12 +316,12 @@ function Instagram() {
                     return (
                       <div
                         className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-                        // onClick={() => {
-                        //   navigator.clipboard.writeText(generatedCaptions);
-                        //   toast("CapgeneratedCaptions copied to clipboard", {
-                        //     icon: "✂️",
-                        //   });
-                        // }}
+                        onClick={() => {
+                          navigator.clipboard.writeText(generatedCaptions);
+                          toast("Caption copied to clipboard", {
+                            icon: "✂️",
+                          });
+                        }}
                         key={generatedCaptions}
                       >
                         <p>{generatedCaptions}</p>
