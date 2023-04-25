@@ -4,11 +4,12 @@ import Header from "../../components/Header";
 import Link from "next/link";
 import CelebDropDown, { VibeType } from "../../components/CelebDropDown";
 import LoadingDots from "../../components/LoadingDots";
+import Footer from "../../components/Footer";
 
 function Instagram() {
   const [vibe, setVibe] = useState<VibeType>("Funny");
   const [bio, setBio] = useState("");
-  const [generatedBios, setGeneratedBios] = useState<String>("");
+  const [generatedCaptions, setgeneratedCaptions] = useState<String>("");
 
   const [igCaption, setIgCaption] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -68,33 +69,49 @@ function Instagram() {
 
   let prompt: string;
 
-switch(vibe) {
-  case "Lebron":
-    let lebroncaptions = [
-      "PHONE DOWN, but I'm UPGRADING! 📱💥💸. Who knew a penny could pack a punch?! Time to level up and get that shiny new tech! LIVE.LAUGH.LOVE #newphonevibes📱 #pennypower💪 #upgradeyourlife🚀 #techsavvy🤓",
-      "SINGLE and THRIVING, but where's the LOVE?! 🤔🤔🤔🤔🕺🏾. Keep swiping right and shooting your shot! The dating game is a wild ride, no doubt. LIVE.LAUGH.LOVE #searchingfortheone🔍 #singlesquad🙌 #heartseeker💘 #lovewarrior🛡️"
-    ];
-    prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Make the caption look like NBA player Lebron James captions, he loves his emojis too. Also, here's 2 examples of Lebron's captions, to base future captions off of: ${lebroncaptions[0]} and ${lebroncaptions[1]}. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  case "Professional":
-    prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  case "Funny":
-    prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Inject humor into your biographies and make them memorable. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  case "Casual":
-    prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a relaxed and informal tone, and showcase your interests and personality. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  case "Donald Trump":
-    prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  default:
-    prompt = `Invalid vibe type. Please choose a vibe type.`;
-}
+  //STILL NEED TO ACCOUNT FOR PICTURE CAPTION IN THIS SECTION
 
-  const generateBio = async (e: any) => {
+  switch (vibe) {
+    case "Lebron":
+      let lebroncaptions = [
+        "PHONE DOWN, but I'm UPGRADING! 📱💥💸. Who knew a penny could pack a punch?! Time to level up and get that shiny new tech! LIVE.LAUGH.LOVE #newphonevibes📱 #pennypower💪 #upgradeyourlife🚀 #techsavvy🤓",
+        "SINGLE and THRIVING, but where's the LOVE?! 🤔🤔🤔🤔🕺🏾. Keep swiping right and shooting your shot! The dating game is a wild ride, no doubt. LIVE.LAUGH.LOVE #searchingfortheone🔍 #singlesquad🙌 #heartseeker💘 #lovewarrior🛡️",
+      ];
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Make the caption look like NBA player Lebron James captions, he loves his emojis too. Also, here's 2 examples of Lebron's captions, to base future captions off of: ${
+        lebroncaptions[0]
+      } and ${
+        lebroncaptions[1]
+      }. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    case "Professional":
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    case "Funny":
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Inject humor into your captions and make them memorable. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    case "Casual":
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a relaxed and informal tone, and showcase your interests and personality. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    case "Donald Trump":
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    default:
+      prompt = `Invalid vibe type. Please choose a vibe type.`;
+  }
+
+  const generateCaption = async (e: any) => {
     e.preventDefault();
-    setGeneratedBios("");
+    setgeneratedCaptions("");
     setLoading(true);
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -124,11 +141,11 @@ switch(vibe) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
+      setgeneratedCaptions((prev) => prev + chunkValue);
     }
     // scrollToBios();
     setLoading(false);
-    console.log(generatedBios)
+    console.log(generatedCaptions);
   };
 
   return (
@@ -216,9 +233,9 @@ switch(vibe) {
           <div className="max-w-xl w-full">
             <div className="flex mt-10 items-center space-x-3">
               <p className="text-left font-medium">
-                Copy your current bio{" "}
+                Give us some context behind this picture{" "}
                 <span className="text-slate-500">
-                  (or write a few sentences about yourself)
+                  (or write a few sentences about it)
                 </span>
                 .
               </p>
@@ -229,7 +246,7 @@ switch(vibe) {
               rows={4}
               className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
               placeholder={
-                "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
+                "e.g. I'm a junior web developer in 2023 and this was me and my wife after I got my first job offer!"
               }
             />
             <div className="flex mb-5 items-center space-x-3">
@@ -245,29 +262,64 @@ switch(vibe) {
         </div>
 
         {!loading && (
+          <div className="mt-3 flex flex-col items-center justify-center w-full">
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              onClick={(e) => generateBio(e)}
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              onClick={(e) => generateCaption(e)}
             >
-              Generate your bio &rarr;
+              Generate your caption &rarr;
             </button>
-          )}
-          {loading && (
+          </div>
+        )}
+        {loading && (
+          <div className="mt-3 flex flex-col items-center justify-center w-full">
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
               disabled
             >
               <LoadingDots color="white" style="large" />
             </button>
-          )}
+          </div>
+        )}
 
-          {generatedBios && (
-            <div>
-              <span>{generatedBios}</span>
-            </div>
+        <div className="space-y-10 my-10">
+          {generatedCaptions && (
+            <>
+              <div>
+                <h2
+                  className="text-center sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
+                  // ref={bioRef}
+                >
+                  Your generated CapgeneratedCaptions
+                </h2>
+              </div>
+              <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
+                {generatedCaptions
+                  .substring(generatedCaptions.indexOf("1") + 3)
+                  .split("2.")
+                  .map((generatedCaptions) => {
+                    return (
+                      <div
+                        className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
+                        // onClick={() => {
+                        //   navigator.clipboard.writeText(generatedCaptions);
+                        //   toast("CapgeneratedCaptions copied to clipboard", {
+                        //     icon: "✂️",
+                        //   });
+                        // }}
+                        key={generatedCaptions}
+                      >
+                        <p>{generatedCaptions}</p>
+                      </div>
+                    );
+                  })}
+              </div>
+            </>
           )}
+        </div>
         {/* More content here */}
       </div>
+      <Footer />
     </div>
   );
 }
