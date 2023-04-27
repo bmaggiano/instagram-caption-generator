@@ -1,69 +1,128 @@
-import type { NextPage } from "next";
+import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
-import Image from "next/image";
-import { useRef, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
-import DropDown, { VibeType } from "../components/DropDown";
-import Footer from "../components/Footer";
-import Github from "../components/GitHub";
 import Header from "../components/Header";
-import LoadingDots from "../components/LoadingDots";
-import Instagram from "../components/Instagram";
 import Link from "next/link";
+import { Toaster, toast } from "react-hot-toast";
+import CelebDropDown, { VibeType } from "../components/CelebDropDown";
+import LoadingDots from "../components/LoadingDots";
+import Footer from "../components/Footer";
 
-const Home: NextPage = () => {
-  const [loading, setLoading] = useState(false);
+function Instagram() {
+  const [vibe, setVibe] = useState<VibeType>("Funny");
   const [bio, setBio] = useState("");
-  const [vibe, setVibe] = useState<VibeType>("Professional");
-  const [generatedBios, setGeneratedBios] = useState<String>("");
+  const [generatedCaptions, setgeneratedCaptions] = useState<String>("");
+
+  const [igCaption, setIgCaption] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [capLoading, setCapLoading] = useState(false);
+  const [descLoading, setDescLoading] = useState(false);
+  const [captionLink, setCaptionLink] = useState(false);
+  const [picCaption, setPicCaption] = useState(null);
+
+  useEffect(() => {
+    const imageUrlFromStorage = localStorage.getItem("imageUrl");
+    console.log({ imageUrlFromStorage });
+    if (imageUrlFromStorage) {
+      setImageUrl(imageUrlFromStorage);
+      setIsLoading(false);
+      setCaptionLink(true);
+    }
+  }, []);
+
+  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageUrl(reader.result as string);
+        setIsLoading(false);
+        setCaptionLink(true);
+        localStorage.setItem("imageUrl", reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
-  const scrollToBios = () => {
+  const scrollToCaptions = () => {
     if (bioRef.current !== null) {
       bioRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  // const prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". ${
-  //   vibe === "Funny"
-  //     ? "Make sure there is a joke in there and it's a little ridiculous."
-  //     : null
-  // }
-  //     Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
-  //   bio.slice(-1) === "." ? "" : "."
-  // }`;
+  async function handleImageUploadAndGenerateCaption() {
+    setDescLoading(true);
+
+    if (imageUrl) {
+      const data = {
+        input: {
+          image: imageUrl,
+        },
+      };
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+
+      const res = await fetch("/api/replicate", requestOptions);
+      const json = await res.json();
+      setPicCaption(json.caption);
+      setDescLoading(false);
+    }
+  }
 
   let prompt: string;
 
-switch(vibe) {
-  case "Lebron":
-    let tweets = [
-      "PHONE DOWN, but I'm UPGRADING! 📱💥💸. Who knew a penny could pack a punch?! Time to level up and get that shiny new tech! LIVE.LAUGH.LOVE #newphonevibes📱 #pennypower💪 #upgradeyourlife🚀 #techsavvy🤓",
-      "SINGLE and THRIVING, but where's the LOVE?! 🤔🤔🤔🤔🕺🏾. Keep swiping right and shooting your shot! The dating game is a wild ride, no doubt. LIVE.LAUGH.LOVE #searchingfortheone🔍 #singlesquad🙌 #heartseeker💘 #lovewarrior🛡️"
-    ];
-    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Tweet like NBA player Lebron James tweets, he loves his emojis too. Also, here's 2 examples of Lebron's tweets, to base future tweets off of: ${tweets[0]} and ${tweets[1]}. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  case "Professional":
-    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  case "Funny":
-    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Inject humor into your biographies and make them memorable. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  case "Casual":
-    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Use a relaxed and informal tone, and showcase your interests and personality. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  case "Donald Trump":
-    prompt = `Generate 2 ${vibe} twitter biographies with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${bio.slice(-1) === "." ? "" : "."}`;
-    break;
-  default:
-    prompt = `Invalid vibe type. Please choose a vibe type.`;
-}
+  //STILL NEED TO ACCOUNT FOR PICTURE CAPTION IN THIS SECTION
 
-  const generateBio = async (e: any) => {
+  switch (vibe) {
+    case "Lebron":
+      let lebroncaptions = [
+        "PHONE DOWN, but I'm UPGRADING! 📱💥💸. Who knew a penny could pack a punch?! Time to level up and get that shiny new tech! LIVE.LAUGH.LOVE #newphonevibes📱 #pennypower💪 #upgradeyourlife🚀 #techsavvy🤓",
+        "SINGLE and THRIVING, but where's the LOVE?! 🤔🤔🤔🤔🕺🏾. Keep swiping right and shooting your shot! The dating game is a wild ride, no doubt. LIVE.LAUGH.LOVE #searchingfortheone🔍 #singlesquad🙌 #heartseeker💘 #lovewarrior🛡️",
+      ];
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Make the caption look like NBA player Lebron James captions, he loves his emojis too. Also, here's 2 examples of Lebron's captions, to base future captions off of: ${
+        lebroncaptions[0]
+      } and ${
+        lebroncaptions[1]
+      }. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    case "Professional":
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    case "Funny":
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Inject humor into your captions and make them memorable. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    case "Casual":
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a relaxed and informal tone, and showcase your interests and personality. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    case "Donald Trump":
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
+    default:
+      prompt = `Invalid vibe type. Please choose a vibe type.`;
+  }
+
+  const generateCaption = async (e: any) => {
     e.preventDefault();
-    setGeneratedBios("");
-    setLoading(true);
+    setgeneratedCaptions("");
+    setCapLoading(true);
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
@@ -92,128 +151,181 @@ switch(vibe) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
+      setgeneratedCaptions((prev) => prev + chunkValue);
     }
-    scrollToBios();
-    setLoading(false);
+    scrollToCaptions();
+    setCapLoading(false);
+    console.log(generatedCaptions);
   };
 
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
       <Head>
-        <title>Twitter Bio Generator</title>
+        <title>Instagram Image Upload</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-      <Link
-          className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
-          href="/instagram"
-          rel="noopener noreferrer"
-        >
-          <Instagram size={20} />
-          <p>Instagram Caption Generator</p>
-        </Link>
-          <br/>
-        <a
-          className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
-          href="https://github.com/Nutlope/twitterbio"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Github />
-          <p>Star on GitHub</p>
-        </a>
-        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-          Generate your next Twitter bio using chatGPT
-        </h1>
-        <p className="text-slate-500 mt-5">47,118 bios generated so far.</p>
-        <div className="max-w-xl w-full">
-          <div className="flex mt-10 items-center space-x-3">
-            <Image
-              src="/1-black.png"
-              width={30}
-              height={30}
-              alt="1 icon"
-              className="mb-5 sm:mb-0"
-            />
-            <p className="text-left font-medium">
-              Copy your current bio{" "}
-              <span className="text-slate-500">
-                (or write a few sentences about yourself)
-              </span>
-              .
-            </p>
-          </div>
-          <textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            rows={4}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-            placeholder={
-              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
-            }
-          />
-          <div className="flex mb-5 items-center space-x-3">
-            <Image src="/2-black.png" width={30} height={30} alt="1 icon" />
-            <p className="text-left font-medium">Select your vibe.</p>
-          </div>
-          <div className="block">
-            <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
-          </div>
 
-          {!loading && (
+      <div>
+        <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
+          <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
+            Use AI to generate your IG Caption
+          </h1>
+        </main>
+        <br />
+
+        <div className="mt-3 flex items-center justify-center w-full">
+          <label
+            htmlFor="dropzone-file"
+            className="flex flex-col items-center justify-center w-full h-96 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          >
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt="Uploaded file"
+                className="h-2/3 mb-3 text-gray-400"
+              />
+            )}
+
+            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <span className="font-semibold">Click to upload</span> or drag and
+              drop
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              SVG, PNG, JPG or GIF (MAX. 800x400px)
+            </p>
+            <input
+              id="dropzone-file"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              max-file-size="800000"
+              onChange={handleImageChange}
+            />
+          </label>
+        </div>
+
+        {!descLoading && captionLink && imageUrl && (
+          <div className="mt-3 flex flex-col items-center justify-center w-full">
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-              onClick={(e) => generateBio(e)}
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              onClick={(e) => handleImageUploadAndGenerateCaption()}
             >
-              Generate your bio &rarr;
+              Generate picture description &rarr;
             </button>
-          )}
-          {loading && (
+            <br />
+            {picCaption && (
+              <>
+                <div className="border-gray-300 bg-white text-gray-600 shadow-md px-4 py-2 rounded-xl transition-colors hover:bg-gray-100 cursor-pointer">
+                  <span className="flex mb-2 font-bold justify-center">
+                    {" "}
+                    Generated description:{" "}
+                  </span>
+                  <span>{picCaption}</span>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+        {descLoading && (
+          <div className="mt-3 flex flex-col items-center justify-center w-full">
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
               disabled
             >
               <LoadingDots color="white" style="large" />
             </button>
-          )}
+          </div>
+        )}
+
+        <div className="flex flex-1 w-full flex-col items-center justify-center text-center px-4">
+          <div className="max-w-xl w-full">
+            <div className="flex mt-10 items-center space-x-3">
+              <p className="text-left font-medium">
+                Give us some context behind this picture{" "}
+                <span className="text-slate-500">
+                  (or write a few sentences about it)
+                </span>
+                .
+              </p>
+            </div>
+            <textarea
+              value={igCaption}
+              onChange={(e) => setIgCaption(e.target.value)}
+              rows={4}
+              className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
+              placeholder={
+                "e.g. I'm a junior web developer in 2023 and this was me and my wife after I got my first job offer!"
+              }
+            />
+            <div className="flex mb-5 items-center space-x-3">
+              <p className="text-left font-medium">Select your vibe.</p>
+            </div>
+            <div className="block">
+              <CelebDropDown
+                vibe={vibe}
+                setVibe={(newVibe) => setVibe(newVibe)}
+              />
+            </div>
+          </div>
         </div>
-        <Toaster
+
+        {!capLoading && (
+          <div className="mt-3 flex flex-col items-center justify-center w-full">
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              onClick={(e) => generateCaption(e)}
+            >
+              Generate your caption &rarr;
+            </button>
+          </div>
+        )}
+        {capLoading && (
+          <div className="mt-3 flex flex-col items-center justify-center w-full">
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              disabled
+            >
+              <LoadingDots color="white" style="large" />
+            </button>
+          </div>
+        )}
+
+<Toaster
           position="top-center"
           reverseOrder={false}
           toastOptions={{ duration: 2000 }}
         />
-        <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
+
         <div className="space-y-10 my-10">
-          {generatedBios && (
+          {generatedCaptions && (
             <>
               <div>
                 <h2
-                  className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
+                  className="text-center sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
                   ref={bioRef}
                 >
-                  Your generated bios
+                  Your generated captions
                 </h2>
               </div>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                {generatedBios
-                  .substring(generatedBios.indexOf("1") + 3)
+                {generatedCaptions
+                  .substring(generatedCaptions.indexOf("1") + 3)
                   .split("2.")
-                  .map((generatedBio) => {
+                  .map((generatedCaptions) => {
                     return (
                       <div
                         className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
                         onClick={() => {
-                          navigator.clipboard.writeText(generatedBio);
-                          toast("Bio copied to clipboard", {
+                          navigator.clipboard.writeText(generatedCaptions);
+                          toast("Caption copied to clipboard", {
                             icon: "✂️",
                           });
                         }}
-                        key={generatedBio}
+                        key={generatedCaptions}
                       >
-                        <p>{generatedBio}</p>
+                        <p>{generatedCaptions}</p>
                       </div>
                     );
                   })}
@@ -221,10 +333,11 @@ switch(vibe) {
             </>
           )}
         </div>
-      </main>
+        {/* More content here */}
+      </div>
       <Footer />
     </div>
   );
-};
+}
 
-export default Home;
+export default Instagram;
