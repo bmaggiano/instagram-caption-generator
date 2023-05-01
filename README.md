@@ -2,7 +2,7 @@
 
 This project generates Instagram captions for you using AI.
 
-[![Instagram Caption Generator](./public/screenshot.png)]
+![Instagram Caption Generator](./public/screenshot.png)
 
 ## How it works
 
