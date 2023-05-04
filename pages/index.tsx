@@ -31,6 +31,13 @@ function Instagram() {
 
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
+
+    if (file && file.size > 1000000) {
+      setImageUrl("")
+      alert("file size must be less than 1mb")
+      return;
+    }
+
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
