@@ -11,6 +11,7 @@
     "@heroicons/react": "^2.0.13",
     "@reduxjs/toolkit": "^1.9.5",
     "@tailwindcss/forms": "^0.5.3",
+    "@uploadthing/react": "^2.0.1",
     "@vercel/analytics": "^0.1.8",
     "antd": "^5.4.4",
     "class-variance-authority": "^0.5.2",
@@ -20,6 +21,7 @@
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.42.0",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.8.0",
@@ -28,7 +30,8 @@
     "redux": "^4.2.1",
     "replicate": "^0.11.1",
     "tailwind-merge": "^1.12.0",
-    "tailwindcss-animate": "^1.0.5"
+    "tailwindcss-animate": "^1.0.5",
+    "uploadthing": "^2.0.1"
   },
   "devDependencies": {
     "@types/node": "18.11.3",

@@ -11,7 +11,6 @@ function Instagram() {
   const [vibe, setVibe] = useState<VibeType>("Funny");
   const [bio, setBio] = useState("");
   const [generatedCaptions, setgeneratedCaptions] = useState<String>("");
-
   const [igCaption, setIgCaption] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
