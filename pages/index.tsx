@@ -34,7 +34,13 @@ function Instagram() {
 
     if (file && file.size > 1000000) {
       setImageUrl("")
-      alert("file size must be less than 1mb")
+      toast(`File size must be less than 1MB, the file you tried to upload is ${file.size}MB`, {
+        icon: "❌",
+        style: {
+          border: '1px solid black',
+        },
+        duration: 5000,
+      });
       return;
     }
 
