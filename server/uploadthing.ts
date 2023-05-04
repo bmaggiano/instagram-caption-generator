@@ -1,15 +1,17 @@
-/** app/api/uploadthing/core.ts */
+/** server/uploadthing.ts */
 import { createFilething, type FileRouter } from "uploadthing/server";
 const f = createFilething();
  
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
+// Fake auth function
+const auth = (req: Request) => ({ id: "fakeId" }); 
  
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
   imageUploader: f
     // Set permissions and file types for this FileRoute
-    .fileTypes(["image", "video"])
+    // .fileTypes(["image", "video"])
+    .fileTypes(["image"])
     .maxSize("1GB")
     .middleware(async (req) => {
       // This code runs on your server before upload

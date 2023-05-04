@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+    experimental: {
+      esmExternals: false, // THIS IS THE FLAG THAT MATTERS
+    },
   reactStrictMode: true,
   async redirects() {
     return [
