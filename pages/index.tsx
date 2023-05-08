@@ -34,9 +34,10 @@ function Instagram() {
 
     if (file && file.size > 10000000) {
       setImageUrl("");
-      // convert to mb
+      const fileSizeInMB = file.size / (1024 * 1024); // convert bytes to MB
+      const convertedFileSize = fileSizeInMB.toFixed(2); // round to 2 decimal places
       toast(
-        `File size must be less than 1MB, the file you tried to upload is ${file.size}MB`,
+        `File size must be less than 10MB, the file you tried to upload is ${convertedFileSize}MB`,
         {
           icon: "❌",
           style: {
