@@ -33,15 +33,18 @@ function Instagram() {
     const file = event.target.files?.[0];
 
     if (file && file.size > 1000000) {
-      setImageUrl("")
+      setImageUrl("");
       // convert to mb
-      toast(`File size must be less than 1MB, the file you tried to upload is ${file.size}MB`, {
-        icon: "❌",
-        style: {
-          border: '1px solid black',
-        },
-        duration: 5000,
-      });
+      toast(
+        `File size must be less than 1MB, the file you tried to upload is ${file.size}MB`,
+        {
+          icon: "❌",
+          style: {
+            border: "1px solid black",
+          },
+          duration: 5000,
+        }
+      );
       return;
     }
 
@@ -126,16 +129,20 @@ function Instagram() {
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
-      case "Drake":
-        let drakecaptions = [
-          "not to get the tea brewing but I wonder how your friend that looks at me with wandering eyes is doing",
-          "I want more of THIS years and years with the gang I’m talking plural And to get there we’ll turn any weirdo to a mural",
-          "Hard Feelings."
-        ];
-        prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Make the caption as if you were Drake, here are a few of Drake's instagram captions for reference: ${drakecaptions[0]}, ${drakecaptions[1]}, ${drakecaptions[2]}. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
-          igCaption.slice(-1) === "." ? "" : "."
-        }`;
-          break;
+    case "Drake":
+      let drakecaptions = [
+        "not to get the tea brewing but I wonder how your friend that looks at me with wandering eyes is doing",
+        "I want more of THIS years and years with the gang I’m talking plural And to get there we’ll turn any weirdo to a mural",
+        "Hard Feelings.",
+      ];
+      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Make the caption as if you were Drake, here are a few of Drake's instagram captions for reference: ${
+        drakecaptions[0]
+      }, ${drakecaptions[1]}, ${
+        drakecaptions[2]
+      }. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
     default:
       prompt = `Invalid vibe type. Please choose a vibe type.`;
   }
@@ -243,7 +250,16 @@ function Instagram() {
                     {" "}
                     Generated description:{" "}
                   </span>
-                  <span>{picCaption}</span>
+                  <span
+                    onClick={() => {
+                      navigator.clipboard.writeText(picCaption);
+                      toast("Caption copied to clipboard", {
+                        icon: "✂️",
+                      });
+                    }}
+                  >
+                    {picCaption}
+                  </span>
                 </div>
               </>
             )}
@@ -313,7 +329,7 @@ function Instagram() {
           </div>
         )}
 
-<Toaster
+        <Toaster
           position="top-center"
           reverseOrder={false}
           toastOptions={{ duration: 2000 }}
