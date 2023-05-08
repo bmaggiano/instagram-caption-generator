@@ -6,7 +6,6 @@ import { Toaster, toast } from "react-hot-toast";
 import CelebDropDown, { VibeType } from "../components/CelebDropDown";
 import LoadingDots from "../components/LoadingDots";
 import Footer from "../components/Footer";
-import MultiUploader from "./test";
 
 function Instagram() {
   const [vibe, setVibe] = useState<VibeType>("Funny");
@@ -35,6 +34,7 @@ function Instagram() {
 
     if (file && file.size > 1000000) {
       setImageUrl("")
+      // convert to mb
       toast(`File size must be less than 1MB, the file you tried to upload is ${file.size}MB`, {
         icon: "❌",
         style: {
@@ -189,10 +189,6 @@ function Instagram() {
       <Header />
 
       <div>
-        <MultiUploader/>
-      </div>
-
-      <div>
         <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
           <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
             Use AI to generate your IG Caption
@@ -279,7 +275,7 @@ function Instagram() {
               value={igCaption}
               onChange={(e) => setIgCaption(e.target.value)}
               rows={4}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
+              className="w-full rounded-md border-gray-300 shadow-sm my-5 p-4 bg-gray-100 bg-gray-50 shadow-md resize-none"
               placeholder={
                 "e.g. I'm a junior web developer in 2023 and this was me and my wife after I got my first job offer!"
               }
