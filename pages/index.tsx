@@ -32,7 +32,7 @@ function Instagram() {
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
 
-    if (file && file.size > 1000000) {
+    if (file && file.size > 10000000) {
       setImageUrl("");
       // convert to mb
       toast(
@@ -221,14 +221,14 @@ function Instagram() {
               drop
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              SVG, PNG, JPG or GIF (MAX. 800x400px)
+              SVG, PNG, JPG or GIF (MAX. 10MB)
             </p>
             <input
               id="dropzone-file"
               type="file"
               accept="image/*"
               className="hidden"
-              max-file-size="800000"
+              max-file-size="10000000"
               onChange={handleImageChange}
             />
           </label>
