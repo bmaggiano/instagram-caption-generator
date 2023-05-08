@@ -275,7 +275,7 @@ function Instagram() {
               value={igCaption}
               onChange={(e) => setIgCaption(e.target.value)}
               rows={4}
-              className="w-full rounded-md border-gray-300 shadow-sm my-5 p-4 bg-gray-100 bg-gray-50 shadow-md resize-none"
+              className="w-full rounded-md border-gray-300 shadow-sm my-5 p-4 bg-gray-100 resize-none"
               placeholder={
                 "e.g. I'm a junior web developer in 2023 and this was me and my wife after I got my first job offer!"
               }
