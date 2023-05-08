@@ -1,26 +1,70 @@
 import { generateReactHelpers } from "@uploadthing/react";
 import type { OurFileRouter } from "../server/uploadthing";
- 
+import { useState } from "react";
+
 const { useUploadThing } = generateReactHelpers<OurFileRouter>();
- 
-// need to figure out a way to integrate this logic into index.tsx file to have flies upload to uploadthing
-// then need to use literals to retrieve the link of the picture (possibly API call if necessary.. look into this)
 
 export default function MultiUploader() {
-  const { getRootProps, getInputProps, isDragActive, files, startUpload } =
+
+  const [utUrl, setutUrl] = useState("")
+  
+  const { getRootProps, getInputProps, files, startUpload } =
     useUploadThing("imageUploader");
- 
+
+  const handleUploadClick = () => {
+    const fileInput = document.getElementById("fileInput");
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          setutUrl(reader.result as string);
+          // setIsLoading(false);
+          // setCaptionLink(true);
+          // localStorage.setItem("imageUrl", reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+  };
+  
+  
+
   return (
     <div {...getRootProps()}>
-      <input {...getInputProps()} />
+<input
+  {...getInputProps({ onChange: handleFileSelect })}
+  id="fileInput"
+  type="file"
+  style={{ display: "none" }}
+/>
+
       <div>
-        {files.length > 0 && (
-          <button onClick={() => startUpload()}>
-            Upload {files.length} files
-          </button>
-        )}
+        <button onClick={handleUploadClick}>Select files to upload</button>
+        <div>
+          {/* Image preview */}
+          {files.length > 0 && (
+  <img
+    id="imagePreview"
+    alt="uploaded file"
+    src={utUrl} // placeholder image
+    className="h-2/3 text-gray-400"
+    />
+)}
+        </div>
+        <div>
+          {files.length > 0 && (
+            <button onClick={() => startUpload()}>
+              Upload {files.length} files
+            </button>
+          )}
+        </div>
       </div>
-      Drop files here!
     </div>
   );
 }

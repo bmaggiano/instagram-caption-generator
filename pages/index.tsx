@@ -6,6 +6,7 @@ import { Toaster, toast } from "react-hot-toast";
 import CelebDropDown, { VibeType } from "../components/CelebDropDown";
 import LoadingDots from "../components/LoadingDots";
 import Footer from "../components/Footer";
+import MultiUploader from "./test";
 
 function Instagram() {
   const [vibe, setVibe] = useState<VibeType>("Funny");
@@ -90,8 +91,6 @@ function Instagram() {
   }
 
   let prompt: string;
-
-  //STILL NEED TO ACCOUNT FOR PICTURE CAPTION IN THIS SECTION
 
   switch (vibe) {
     case "Lebron":
@@ -188,6 +187,10 @@ function Instagram() {
       </Head>
 
       <Header />
+
+      <div>
+        <MultiUploader/>
+      </div>
 
       <div>
         <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
