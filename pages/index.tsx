@@ -19,22 +19,13 @@ function Instagram() {
   const [bio, setBio] = useState("");
   const [generatedCaptions, setgeneratedCaptions] = useState<String>("");
   const [igCaption, setIgCaption] = useState("");
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [capLoading, setCapLoading] = useState(false);
   const [descLoading, setDescLoading] = useState(false);
   const [captionLink, setCaptionLink] = useState(false);
   const [picCaption, setPicCaption] = useState(null);
 
-  useEffect(() => {
-    const imageUrlFromStorage = localStorage.getItem("imageUrl");
-    // console.log({ imageUrlFromStorage });
-    if (imageUrlFromStorage) {
-      setImageUrl(imageUrlFromStorage);
-      setIsLoading(false);
-      setCaptionLink(true);
-    }
-  }, []);
+
 
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];

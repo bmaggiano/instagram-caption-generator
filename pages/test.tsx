@@ -33,20 +33,22 @@ export default function MultiUploader() {
       >
         <input {...getInputProps()} id="dropzone-file" type="file" />
         Drop files here!
-        {imageUrl && <img 
-        src={imageUrl} 
-        className="h-2/3 mb-3 text-gray-400"
-
-        alt="uploaded image" />}
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            className="h-2/3 mb-3 text-gray-400"
+            alt="uploaded image"
+          />
+        )}
         {/* {files[0] && <img src={files[0]?.contents} alt="" />} */}
-        
         <div>
           <button
             onClick={async () => {
               const metadata = await startUpload();
               const imageUrl = metadata[0]?.fileUrl;
               localStorage.setItem("imageUrl", imageUrl);
-              console.log("client side url for brandon", imageUrl);
+              setImageUrl(imageUrl);
+              window.location.reload();
             }}
           >
             Upload {files.length} files
