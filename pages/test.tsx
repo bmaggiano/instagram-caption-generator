@@ -23,6 +23,7 @@ export default function MultiUploader() {
   }, []);
 
   return (
+    <>
     <div
       {...getRootProps()}
       className="mt-3 flex items-center justify-center w-full"
@@ -40,9 +41,13 @@ export default function MultiUploader() {
             alt="uploaded image"
           />
         )}
-        {/* {files[0] && <img src={files[0]?.contents} alt="" />} */}
-        <div>
+      </label>
+    </div>
+    <div className="mt-3 flex flex-col items-center justify-center w-full">
+
           <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+
             onClick={async () => {
               const metadata = await startUpload();
               const imageUrl = metadata[0]?.fileUrl;
@@ -53,8 +58,7 @@ export default function MultiUploader() {
           >
             Upload {files.length} files
           </button>
-        </div>
-      </label>
-    </div>
+          </div>
+    </>
   );
 }

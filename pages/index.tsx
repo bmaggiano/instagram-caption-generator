@@ -17,6 +17,7 @@ function Instagram() {
 
   const [vibe, setVibe] = useState<VibeType>("Funny");
   const [bio, setBio] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [generatedCaptions, setgeneratedCaptions] = useState<String>("");
   const [igCaption, setIgCaption] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +26,15 @@ function Instagram() {
   const [captionLink, setCaptionLink] = useState(false);
   const [picCaption, setPicCaption] = useState(null);
 
-
+  useEffect(() => {
+    const imageUrlFromStorage = localStorage.getItem("imageUrl");
+    // console.log({ imageUrlFromStorage });
+    if (imageUrlFromStorage) {
+      setImageUrl(imageUrlFromStorage);
+      // setIsLoading(false);
+      // setCaptionLink(true);
+    }
+  }, []);
 
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
