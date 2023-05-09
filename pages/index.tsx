@@ -1,13 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import Header from "../components/Header";
-import Link from "next/link";
 import { Toaster, toast } from "react-hot-toast";
 import CelebDropDown, { VibeType } from "../components/CelebDropDown";
 import LoadingDots from "../components/LoadingDots";
 import Footer from "../components/Footer";
+import { generateReactHelpers } from "@uploadthing/react";
+import type { OurFileRouter } from "../server/uploadthing";
+import MultiUploader from "./test";
+ 
+const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
 function Instagram() {
+
+    const { getRootProps, getInputProps, isDragActive, files, startUpload } = useUploadThing("imageUploader");
+
   const [vibe, setVibe] = useState<VibeType>("Funny");
   const [bio, setBio] = useState("");
   const [generatedCaptions, setgeneratedCaptions] = useState<String>("");
@@ -21,7 +28,7 @@ function Instagram() {
 
   useEffect(() => {
     const imageUrlFromStorage = localStorage.getItem("imageUrl");
-    console.log({ imageUrlFromStorage });
+    // console.log({ imageUrlFromStorage });
     if (imageUrlFromStorage) {
       setImageUrl(imageUrlFromStorage);
       setIsLoading(false);
@@ -52,10 +59,11 @@ function Instagram() {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
+        const image = reader.result as string
         setImageUrl(reader.result as string);
         setIsLoading(false);
         setCaptionLink(true);
-        localStorage.setItem("imageUrl", reader.result as string);
+        // localStorage.setItem("imageUrl", reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -70,28 +78,30 @@ function Instagram() {
   };
 
   async function handleImageUploadAndGenerateCaption() {
-    setDescLoading(true);
+    // setDescLoading(true);
+    startUpload();
+    console.log('uploaded success', files)
 
-    if (imageUrl) {
-      const data = {
-        input: {
-          image: imageUrl,
-        },
-      };
+    // if (imageUrl) {
+    //   const data = {
+    //     input: {
+    //       image: imageUrl,
+    //     },
+    //   };
 
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      };
+    //   const requestOptions = {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(data),
+    //   };
 
-      const res = await fetch("/api/replicate", requestOptions);
-      const json = await res.json();
-      setPicCaption(json.caption);
-      setDescLoading(false);
-    }
+    //   const res = await fetch("/api/replicate", requestOptions);
+    //   const json = await res.json();
+    //   setPicCaption(json.caption);
+    //   setDescLoading(false);
+    // }
   }
 
   let prompt: string;
@@ -204,7 +214,7 @@ function Instagram() {
         </main>
         <br />
 
-        <div className="mt-3 flex items-center justify-center w-full">
+        {/* <div className="mt-3 flex items-center justify-center w-full">
           <label
             htmlFor="dropzone-file"
             className="flex flex-col items-center justify-center w-full h-96 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -212,6 +222,7 @@ function Instagram() {
             {imageUrl && (
               <img
                 src={imageUrl}
+                // src="https://uploadthing.com/f/225e6bda-ca8d-4515-bf2e-3a1298779649_a75baf14f46cfe98fea7245226015dc3.jpg"
                 alt="Uploaded file"
                 className="h-2/3 mb-3 text-gray-400"
               />
@@ -233,7 +244,9 @@ function Instagram() {
               onChange={handleImageChange}
             />
           </label>
-        </div>
+        </div> */}
+
+        <MultiUploader/>
 
         {!descLoading && captionLink && imageUrl && (
           <div className="mt-3 flex flex-col items-center justify-center w-full">
