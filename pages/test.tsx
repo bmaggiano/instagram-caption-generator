@@ -54,7 +54,7 @@ export default function MultiUploader() {
             window.location.reload();
           }}
         >
-          Upload & Generate Caption
+          Upload {files.length} files
         </button>
       </div>
     </>

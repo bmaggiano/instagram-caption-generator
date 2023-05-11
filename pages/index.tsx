@@ -79,7 +79,6 @@ function Instagram() {
 
   async function handleImageUploadAndGenerateCaption() {
     // setDescLoading(true);
-    startUpload();
     console.log('uploaded success', files)
 
     // if (imageUrl) {
