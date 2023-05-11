@@ -239,7 +239,7 @@ function Instagram() {
         {descLoading && (
           <div className="mt-3 flex flex-col items-center justify-center w-full">
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              className="bg-gray-500 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
               disabled
             >
               <LoadingDots color="white" style="large" />
@@ -292,7 +292,7 @@ function Instagram() {
         {capLoading && (
           <div className="mt-3 flex flex-col items-center justify-center w-full">
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              className="bg-gray-500 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
               disabled
             >
               <LoadingDots color="white" style="large" />

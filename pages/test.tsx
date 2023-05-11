@@ -62,23 +62,25 @@ export default function MultiUploader() {
 
       {files.length > 0 && (
         <div className="mt-3 flex flex-col items-center justify-center w-full">
-{ !loading &&         <button
-            className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
-            onClick={async () => {
-              setLoading(true)
-              const metadata = await startUpload();
-              const lastMetadata = metadata[metadata.length - 1];
-              const imageUrl = lastMetadata?.fileUrl;
-              localStorage.setItem("imageUrl", imageUrl);
-              setImageUrl(imageUrl);
-              window.location.reload();
-            }}
-          >
-            Upload image
-          </button>}
+          {!loading && (
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              onClick={async () => {
+                setLoading(true);
+                const metadata = await startUpload();
+                const lastMetadata = metadata[metadata.length - 1];
+                const imageUrl = lastMetadata?.fileUrl;
+                localStorage.setItem("imageUrl", imageUrl);
+                setImageUrl(imageUrl);
+                window.location.reload();
+              }}
+            >
+              Upload image
+            </button>
+          )}
           {loading && (
-            <button className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50">
-              <LoadingDots color="white" style="large"/>
+            <button className="bg-gray-500 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50">
+              <LoadingDots color="white" style="large" />
             </button>
           )}
         </div>
