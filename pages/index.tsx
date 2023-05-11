@@ -5,15 +5,11 @@ import { Toaster, toast } from "react-hot-toast";
 import CelebDropDown, { VibeType } from "../components/CelebDropDown";
 import LoadingDots from "../components/LoadingDots";
 import Footer from "../components/Footer";
-import { generateReactHelpers } from "@uploadthing/react";
-import type { OurFileRouter } from "../server/uploadthing";
 import MultiUploader from "./test";
  
-const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
 function Instagram() {
 
-    const { getRootProps, getInputProps, isDragActive, files, startUpload } = useUploadThing("imageUploader");
 
   const [vibe, setVibe] = useState<VibeType>("Funny");
   const [bio, setBio] = useState("");
@@ -23,16 +19,12 @@ function Instagram() {
   const [isLoading, setIsLoading] = useState(true);
   const [capLoading, setCapLoading] = useState(false);
   const [descLoading, setDescLoading] = useState(false);
-  const [captionLink, setCaptionLink] = useState(false);
   const [picCaption, setPicCaption] = useState(null);
 
   useEffect(() => {
     const imageUrlFromStorage = localStorage.getItem("imageUrl");
-    // console.log({ imageUrlFromStorage });
     if (imageUrlFromStorage) {
       setImageUrl(imageUrlFromStorage);
-      // setIsLoading(false);
-      // setCaptionLink(true);
     }
   }, []);
 
@@ -62,8 +54,6 @@ function Instagram() {
         const image = reader.result as string
         setImageUrl(reader.result as string);
         setIsLoading(false);
-        setCaptionLink(true);
-        // localStorage.setItem("imageUrl", reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -78,29 +68,28 @@ function Instagram() {
   };
 
   async function handleImageUploadAndGenerateCaption() {
-    // setDescLoading(true);
-    console.log('uploaded success', files)
+    setDescLoading(true);
 
-    // if (imageUrl) {
-    //   const data = {
-    //     input: {
-    //       image: imageUrl,
-    //     },
-    //   };
+    if (imageUrl) {
+      const data = {
+        input: {
+          image: imageUrl,
+        },
+      };
 
-    //   const requestOptions = {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   };
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
 
-    //   const res = await fetch("/api/replicate", requestOptions);
-    //   const json = await res.json();
-    //   setPicCaption(json.caption);
-    //   setDescLoading(false);
-    // }
+      const res = await fetch("/api/replicate", requestOptions);
+      const json = await res.json();
+      setPicCaption(json.caption);
+      setDescLoading(false);
+    }
   }
 
   let prompt: string;
@@ -213,41 +202,10 @@ function Instagram() {
         </main>
         <br />
 
-        {/* <div className="mt-3 flex items-center justify-center w-full">
-          <label
-            htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-full h-96 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-          >
-            {imageUrl && (
-              <img
-                src={imageUrl}
-                // src="https://uploadthing.com/f/225e6bda-ca8d-4515-bf2e-3a1298779649_a75baf14f46cfe98fea7245226015dc3.jpg"
-                alt="Uploaded file"
-                className="h-2/3 mb-3 text-gray-400"
-              />
-            )}
-
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              SVG, PNG, JPG or GIF (MAX. 10MB)
-            </p>
-            <input
-              id="dropzone-file"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              max-file-size="10000000"
-              onChange={handleImageChange}
-            />
-          </label>
-        </div> */}
 
         <MultiUploader/>
 
-        {!descLoading && captionLink && imageUrl && (
+        {!descLoading && imageUrl && (
           <div className="mt-3 flex flex-col items-center justify-center w-full">
             <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"

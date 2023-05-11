@@ -43,6 +43,9 @@ export default function MultiUploader() {
           )}
         </label>
       </div>
+
+{files.length > 0 && (
+
       <div className="mt-3 flex flex-col items-center justify-center w-full">
         <button
           className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
@@ -57,6 +60,10 @@ export default function MultiUploader() {
           Upload {files.length} files
         </button>
       </div>
+
+)}
+
+
     </>
   );
 }
