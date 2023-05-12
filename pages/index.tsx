@@ -7,6 +7,10 @@ import LoadingDots from "../components/LoadingDots";
 import Footer from "../components/Footer";
 import MultiUploader from "./test";
 import AlertDemo from "../components/Alert";
+import { generateReactHelpers } from "@uploadthing/react";
+import type { OurFileRouter } from "../server/uploadthing";
+
+const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
 function Instagram() {
   const [vibe, setVibe] = useState<VibeType>("Funny");
@@ -19,6 +23,15 @@ function Instagram() {
   const [descLoading, setDescLoading] = useState(false);
   const [picCaption, setPicCaption] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+    const { getRootProps, getInputProps, isDragActive, files, startUpload } =
+    useUploadThing("imageUploader");
+
+      const userImage =
+    files.length > 0 && files[files.length - 1]?.contents
+      ? files[files.length - 1]?.contents
+      : null;
 
   useEffect(() => {
     const imageUrlFromStorage = localStorage.getItem("imageUrl");
@@ -73,7 +86,12 @@ function Instagram() {
   };
 
   async function handleImageUploadAndGenerateCaption() {
-    setDescLoading(true);
+    setLoading(true);
+    const metadata = await startUpload();
+    const lastMetadata = metadata[metadata.length - 1];
+    const imageUrl = lastMetadata?.fileUrl;
+    localStorage.setItem("imageUrl", imageUrl);
+    setImageUrl(imageUrl);
 
     if (imageUrl) {
       const data = {
@@ -93,8 +111,8 @@ function Instagram() {
       const res = await fetch("/api/replicate", requestOptions);
       const json = await res.json();
       setPicCaption(json.caption);
-      setDescLoading(false);
     }
+    setLoading(false)
   }
 
   let prompt: string;
@@ -213,18 +231,73 @@ function Instagram() {
         <br />
 
         <div className="p-4">
-          <MultiUploader />
+          
+          <div
+        {...getRootProps()}
+        className="mt-3 flex items-center justify-center w-full"
+      >
+        <label
+          htmlFor="dropzone-file"
+          className="flex flex-col items-center justify-center w-full h-72 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        >
+          <input {...getInputProps()} id="dropzone-file" type="file" />
+          {!userImage && !imageUrl && <>Add pictures here!</>}{" "}
+          {userImage && imageUrl && (
+            <img
+              src={userImage}
+              className="h-2/3 mb-3 text-gray-400"
+              alt="uploaded image"
+            />
+          )}
+          {userImage && !imageUrl && (
+            <img
+              src={userImage}
+              className="h-2/3 mb-3 text-gray-400"
+              alt="uploaded image"
+            />
+          )}
+          {imageUrl && !userImage && (
+            <img
+              src={imageUrl}
+              className="h-2/3 mb-3 text-gray-400"
+              alt="uploaded image"
+            />
+          )}
+        </label>
+      </div>
+
+      {files.length > 0 && (
+        <div className="mt-3 flex flex-col items-center justify-center w-full">
+          {!loading && (
+            <button
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+              onClick={async () => {
+
+                handleImageUploadAndGenerateCaption()
+              }}
+            >
+              Upload image
+            </button>
+          )}
+          {loading && (
+            <button className="bg-gray-500 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50">
+              <LoadingDots color="white" style="large" />
+            </button>
+          )}
+        </div>
+      )}
+          
         </div>
 
         {!descLoading && imageUrl && (
           <div className="mt-3 flex flex-col items-center justify-center w-full">
-            <button
+            {/* <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
               onClick={(e) => handleImageUploadAndGenerateCaption()}
             >
               Generate picture description &rarr;
             </button>
-            <br />
+            <br /> */}
             {picCaption && (
               <>
                 <div className="border-gray-300 bg-white text-gray-600 shadow-md px-4 py-2 rounded-xl transition-colors hover:bg-gray-100 cursor-pointer">
