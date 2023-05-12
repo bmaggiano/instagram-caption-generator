@@ -7,10 +7,8 @@ import LoadingDots from "../components/LoadingDots";
 import Footer from "../components/Footer";
 import MultiUploader from "./test";
 import AlertDemo from "../components/Alert";
- 
 
 function Instagram() {
-
   const [vibe, setVibe] = useState<VibeType>("Funny");
   const [bio, setBio] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -20,8 +18,7 @@ function Instagram() {
   const [capLoading, setCapLoading] = useState(false);
   const [descLoading, setDescLoading] = useState(false);
   const [picCaption, setPicCaption] = useState(null);
-    const [showAlert, setShowAlert] = useState(false)
-
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const imageUrlFromStorage = localStorage.getItem("imageUrl");
@@ -30,7 +27,7 @@ function Instagram() {
     }
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     if (imageUrl !== null) {
       setShowAlert(true);
     }
@@ -59,7 +56,7 @@ function Instagram() {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        const image = reader.result as string
+        const image = reader.result as string;
         setImageUrl(reader.result as string);
         setIsLoading(false);
       };
@@ -202,20 +199,22 @@ function Instagram() {
 
       <Header />
 
-          {showAlert && (
-      <AlertDemo/>
-    )}
+      {showAlert && 
+      <div className="p-4">
+        <AlertDemo />
+        </div>}
 
       <div>
-        <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-8">
+        <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4">
           <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
             Use AI to generate your new IG Caption
           </h1>
         </main>
         <br />
 
-
-        <MultiUploader/>
+        <div className="p-4">
+        <MultiUploader />
+        </div>
 
         {!descLoading && imageUrl && (
           <div className="mt-3 flex flex-col items-center justify-center w-full">
