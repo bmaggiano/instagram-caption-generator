@@ -5,7 +5,6 @@ import { Toaster, toast } from "react-hot-toast";
 import CelebDropDown, { VibeType } from "../components/CelebDropDown";
 import LoadingDots from "../components/LoadingDots";
 import Footer from "../components/Footer";
-import MultiUploader from "./test";
 import AlertDemo from "../components/Alert";
 import { generateReactHelpers } from "@uploadthing/react";
 import type { OurFileRouter } from "../server/uploadthing";
