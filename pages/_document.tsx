@@ -30,6 +30,7 @@ class MyDocument extends Document {
             name="twitter:image"
             content="https://twitterbio.com/og-image.png"
           />
+          <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet"/>
         </Head>
         <body>
           <Main />
