@@ -6,10 +6,10 @@ import CelebDropDown, { VibeType } from "../components/CelebDropDown";
 import LoadingDots from "../components/LoadingDots";
 import Footer from "../components/Footer";
 import MultiUploader from "./test";
+import AlertDemo from "../components/Alert";
  
 
 function Instagram() {
-
 
   const [vibe, setVibe] = useState<VibeType>("Funny");
   const [bio, setBio] = useState("");
@@ -20,6 +20,8 @@ function Instagram() {
   const [capLoading, setCapLoading] = useState(false);
   const [descLoading, setDescLoading] = useState(false);
   const [picCaption, setPicCaption] = useState(null);
+    const [showAlert, setShowAlert] = useState(false)
+
 
   useEffect(() => {
     const imageUrlFromStorage = localStorage.getItem("imageUrl");
@@ -27,6 +29,12 @@ function Instagram() {
       setImageUrl(imageUrlFromStorage);
     }
   }, []);
+
+    useEffect(() => {
+    if (imageUrl !== null) {
+      setShowAlert(true);
+    }
+  }, [imageUrl]);
 
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -194,8 +202,12 @@ function Instagram() {
 
       <Header />
 
+          {showAlert && (
+      <AlertDemo/>
+    )}
+
       <div>
-        <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
+        <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-8">
           <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
             Use AI to generate your new IG Caption
           </h1>

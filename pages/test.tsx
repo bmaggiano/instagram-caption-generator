@@ -2,6 +2,7 @@ import { generateReactHelpers } from "@uploadthing/react";
 import type { OurFileRouter } from "../server/uploadthing";
 import { useState, useEffect } from "react";
 import LoadingDots from "../components/LoadingDots";
+import AlertDemo from "../components/Alert";
 
 const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
