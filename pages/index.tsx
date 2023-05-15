@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import Head from "next/head";
 import Header from "../components/Header";
 import { Toaster, toast } from "react-hot-toast";
@@ -38,6 +39,11 @@ function Instagram() {
       setImageUrl(imageUrlFromStorage);
     }
   }, []);
+
+  const clearStorageAndResetImageUrl = () => {
+    setImageUrl("")
+    localStorage.removeItem("imageUrl")
+  }
 
   useEffect(() => {
     if (imageUrl !== null) {
@@ -217,7 +223,9 @@ function Instagram() {
       <Header />
 
       {showAlert && 
-      <div className="p-4">
+      <div 
+      className="md:w-3/4 p-4"
+      >
         <AlertDemo />
       </div>}
 
@@ -227,14 +235,33 @@ function Instagram() {
             Use AI to generate your new IG Caption
           </h1>
         </main>
+
+        {imageUrl && (
+        <div className="flex items-center justify-end px-4">
+          <div 
+          className="flex items-center space-x-2 bg-gray-100 rounded-xl text-black outline outline-1 outline-gray-300 font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-gray-200 cursor-pointer w-50"
+          onClick={() => {
+            clearStorageAndResetImageUrl()
+          }}
+          >
+            <Image
+            src="/refresh-cw.svg"
+            alt="refresh icon"
+            width={20}
+            height={20}/> <p>New Image</p>
+            </div>
+        </div>
+        )}
+
         <br />
 
         <div className="p-4">
           
           <div
         {...getRootProps()}
-        className="mt-3 flex items-center justify-center w-full"
+        className=" flex items-center justify-center w-full"
       >
+
         <label
           htmlFor="dropzone-file"
           className="flex flex-col items-center justify-center w-full h-72 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -289,13 +316,13 @@ function Instagram() {
         </div>
 
         {!descLoading && imageUrl && (
-          <div className="mt-3 flex flex-col items-center justify-center w-full">
+          <div className="px-4 mt-3 flex flex-col items-center justify-center w-full ">
             {picCaption && (
               <>
-                <div className="border-gray-300 bg-white text-gray-600 shadow-md px-4 py-2 rounded-xl transition-colors hover:bg-gray-100 cursor-pointer">
+                <div className="flex flex-col items-center w-full outline outline-1 outline-gray-300 text-gray-600 px-4 py-2 rounded-xl hover:bg-gray-100 cursor-pointer">
                   <span className="flex mb-2 font-bold justify-center">
                     {" "}
-                    Generated description:{" "}
+                    AI Generated description:{" "}
                   </span>
                   <span
                     onClick={() => {
@@ -327,11 +354,11 @@ function Instagram() {
           <div className="max-w-xl w-full">
             <div className="flex mt-10 items-center space-x-3">
               <p className="text-left font-medium">
-                Give us some context behind this picture{" "}
+                Next, give us some context behind this picture{" "}
                 <span className="text-slate-500">
-                  (or write a few sentences about it)
+                  (so we can generate a caption)
                 </span>
-                .
+                
               </p>
             </div>
             <textarea
@@ -344,7 +371,7 @@ function Instagram() {
               }
             />
             <div className="flex mb-5 items-center space-x-3">
-              <p className="text-left font-medium">Select your vibe.</p>
+              <p className="text-left font-medium">Finally, select your vibe</p>
             </div>
             <div className="block">
               <CelebDropDown
