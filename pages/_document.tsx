@@ -5,17 +5,17 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/switch-camera.svg" />
           <meta
             name="description"
             content="Generate your next IG caption in just seconds."
           />
-          <meta property="og:site_name" content="IGCaptionGenerator" />
+          <meta property="og:site_name" content="IG Cap :billed_cap:" />
           <meta
             property="og:description"
             content="Generate your next IG caption in just seconds."
           />
-          <meta property="og:title" content="IG Caption Generator" />
+          <meta property="og:title" content="IG Cap :billed_cap:" />
           <meta
             name="twitter:description"
             content="Generate your next IG caption in just seconds."
