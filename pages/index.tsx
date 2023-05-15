@@ -223,7 +223,7 @@ function Instagram() {
 
       <div>
         <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-8">
-          <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
+          <h1 className="leading-tight sm:text-6xl sm:leading-tight text-4xl max-w-[708px] font-bold text-slate-900">
             Use AI to generate your new IG Caption
           </h1>
         </main>
@@ -290,13 +290,6 @@ function Instagram() {
 
         {!descLoading && imageUrl && (
           <div className="mt-3 flex flex-col items-center justify-center w-full">
-            {/* <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
-              onClick={(e) => handleImageUploadAndGenerateCaption()}
-            >
-              Generate picture description &rarr;
-            </button>
-            <br /> */}
             {picCaption && (
               <>
                 <div className="border-gray-300 bg-white text-gray-600 shadow-md px-4 py-2 rounded-xl transition-colors hover:bg-gray-100 cursor-pointer">
