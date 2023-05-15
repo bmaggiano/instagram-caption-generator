@@ -117,12 +117,12 @@ function Instagram() {
   let prompt: string;
 
   switch (vibe) {
-    case "Lebron":
+    case "Lebron James":
       let lebroncaptions = [
         "PHONE DOWN, but I'm UPGRADING! 📱💥💸. Who knew a penny could pack a punch?! Time to level up and get that shiny new tech! LIVE.LAUGH.LOVE #newphonevibes📱 #pennypower💪 #upgradeyourlife🚀 #techsavvy🤓",
         "SINGLE and THRIVING, but where's the LOVE?! 🤔🤔🤔🤔🕺🏾. Keep swiping right and shooting your shot! The dating game is a wild ride, no doubt. LIVE.LAUGH.LOVE #searchingfortheone🔍 #singlesquad🙌 #heartseeker💘 #lovewarrior🛡️",
       ];
-      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Make the caption look like NBA player Lebron James captions, he loves his emojis too. Also, here's 2 examples of Lebron's captions, to base future captions off of: ${
+      prompt = `Generate 2 instagram captions like you're ${vibe} with no hashtags and clearly labeled "1." and "2.". Make the caption look like NBA player Lebron James captions, he loves his emojis too. Also, here's 2 examples of Lebron's captions, to base future captions off of: ${
         lebroncaptions[0]
       } and ${
         lebroncaptions[1]
@@ -146,7 +146,7 @@ function Instagram() {
       }`;
       break;
     case "Donald Trump":
-      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+      prompt = `Generate 2 instagram captions like you're ${vibe} with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
@@ -156,7 +156,7 @@ function Instagram() {
         "I want more of THIS years and years with the gang I’m talking plural And to get there we’ll turn any weirdo to a mural",
         "Hard Feelings.",
       ];
-      prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Make the caption as if you were Drake, here are a few of Drake's instagram captions for reference: ${
+      prompt = `Generate 2 instagram captions like you're ${vibe} with no hashtags and clearly labeled "1." and "2.". Make the caption as if you were Drake, here are a few of Drake's instagram captions for reference: ${
         drakecaptions[0]
       }, ${drakecaptions[1]}, ${
         drakecaptions[2]
