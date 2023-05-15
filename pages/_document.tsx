@@ -5,7 +5,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link rel="icon" href="/switch-camera.svg" />
+          <link rel="icon" href="/favicon.ico" />
           <meta
             name="description"
             content="Generate your next IG caption in just seconds."
