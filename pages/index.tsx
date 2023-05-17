@@ -21,9 +21,10 @@ function Instagram() {
   const [isLoading, setIsLoading] = useState(true);
   const [capLoading, setCapLoading] = useState(false);
   const [descLoading, setDescLoading] = useState(false);
-  const [picCaption, setPicCaption] = useState(null);
+  const [picCaption, setPicCaption] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
+
 
     const { getRootProps, getInputProps, isDragActive, files, startUpload } =
     useUploadThing("imageUploader");
@@ -40,10 +41,12 @@ function Instagram() {
     }
   }, []);
 
-  const clearStorageAndResetImageUrl = () => {
-    setImageUrl("")
-    localStorage.removeItem("imageUrl")
-  }
+  useEffect(() => {
+    const imageDescFromStorage = localStorage.getItem("imageDesc");
+    if(imageDescFromStorage) {
+      setPicCaption(imageDescFromStorage)
+    }
+  }, [])
 
   useEffect(() => {
     if (imageUrl !== null) {
@@ -51,35 +54,10 @@ function Instagram() {
     }
   }, [imageUrl]);
 
-  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-
-    if (file && file.size > 10000000) {
-      setImageUrl("");
-      const fileSizeInMB = file.size / (1024 * 1024); // convert bytes to MB
-      const convertedFileSize = fileSizeInMB.toFixed(2); // round to 2 decimal places
-      toast(
-        `File size must be less than 10MB, the file you tried to upload is ${convertedFileSize}MB`,
-        {
-          icon: "❌",
-          style: {
-            border: "1px solid black",
-          },
-          duration: 5000,
-        }
-      );
-      return;
-    }
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const image = reader.result as string;
-        setImageUrl(reader.result as string);
-        setIsLoading(false);
-      };
-      reader.readAsDataURL(file);
-    }
+  const clearStorageAndResetImageUrl = () => {
+    setImageUrl("")
+    localStorage.removeItem("imageUrl")
+    localStorage.removeItem("imageDesc")
   }
 
   const bioRef = useRef<null | HTMLDivElement>(null);
@@ -98,7 +76,7 @@ function Instagram() {
     localStorage.setItem("imageUrl", imageUrl);
     setImageUrl(imageUrl);
 
-    if (imageUrl) {
+try {    if (imageUrl) {
       const data = {
         input: {
           image: imageUrl,
@@ -115,9 +93,12 @@ function Instagram() {
 
       const res = await fetch("/api/replicate", requestOptions);
       const json = await res.json();
+      localStorage.setItem("imageDesc", json.caption); // Save picCaption to local storage
       setPicCaption(json.caption);
+    }}
+    finally{
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   let prompt: string;
@@ -298,7 +279,6 @@ function Instagram() {
             <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
               onClick={async () => {
-
                 handleImageUploadAndGenerateCaption()
               }}
             >
@@ -325,6 +305,7 @@ function Instagram() {
                     AI Generated description:{" "}
                   </span>
                   <span
+                  className="text-center"
                     onClick={() => {
                       navigator.clipboard.writeText(picCaption);
                       toast("Caption copied to clipboard", {
