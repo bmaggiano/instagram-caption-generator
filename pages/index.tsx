@@ -45,7 +45,7 @@ function Instagram() {
     const imageDescFromStorage = localStorage.getItem("imageDesc");
     if(imageDescFromStorage) {
       setPicCaption(imageDescFromStorage)
-    }
+    } 
   }, [])
 
   useEffect(() => {
@@ -56,6 +56,7 @@ function Instagram() {
 
   const clearStorageAndResetImageUrl = () => {
     setImageUrl("")
+    setPicCaption(null)
     localStorage.removeItem("imageUrl")
     localStorage.removeItem("imageDesc")
   }
@@ -70,36 +71,41 @@ function Instagram() {
 
   async function handleImageUploadAndGenerateCaption() {
     setLoading(true);
-    const metadata = await startUpload();
-    const lastMetadata = metadata[metadata.length - 1];
-    const imageUrl = lastMetadata?.fileUrl;
-    localStorage.setItem("imageUrl", imageUrl);
-    setImageUrl(imageUrl);
-
-try {    if (imageUrl) {
-      const data = {
-        input: {
-          image: imageUrl,
-        },
-      };
-
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      };
-
-      const res = await fetch("/api/replicate", requestOptions);
-      const json = await res.json();
-      localStorage.setItem("imageDesc", json.caption); // Save picCaption to local storage
-      setPicCaption(json.caption);
-    }}
-    finally{
-      setLoading(false)
+    try {
+      const metadata = await startUpload();
+      const lastMetadata = metadata[metadata.length - 1];
+      const imageUrl = lastMetadata?.fileUrl;
+      localStorage.setItem("imageUrl", imageUrl);
+      setImageUrl(imageUrl);
+  
+      if (imageUrl) {
+        const data = {
+          input: {
+            image: imageUrl,
+          },
+        };
+  
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        };
+  
+        const res = await fetch("/api/replicate", requestOptions);
+        const json = await res.json();
+        setPicCaption(json.caption);
+        localStorage.setItem("imageDesc", json.caption);
+      }
+    } catch (error) {
+      // Handle the error here (e.g., display an error message)
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
+  
 
   let prompt: string;
 
