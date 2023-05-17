@@ -354,7 +354,7 @@ function Instagram() {
               rows={4}
               className="w-full rounded-md border-gray-300 shadow-sm my-5 p-4 bg-gray-100 resize-none"
               placeholder={
-                "e.g. I'm a junior web developer in 2023 and this was me and my wife after I got my first job offer!"
+                "e.g. I'm a web developer in 2023 and this was me and my wife after I got my first job offer!"
               }
             />
             <div className="flex mb-5 items-center space-x-3">
@@ -369,7 +369,7 @@ function Instagram() {
           </div>
         </div>
 
-        {!capLoading && (
+        {!capLoading && imageUrl && (
           <div className="mt-3 flex flex-col items-center justify-center w-full">
             <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
