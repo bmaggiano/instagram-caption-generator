@@ -203,7 +203,7 @@ function Instagram() {
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2">
       <Head>
-        <title>Instagram Image Upload</title>
+        <title>IG Caption Generator :billed_cap:</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
