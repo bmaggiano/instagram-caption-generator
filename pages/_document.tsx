@@ -10,12 +10,12 @@ class MyDocument extends Document {
             name="description"
             content="Generate your next IG caption in just seconds."
           />
-          <meta property="og:site_name" content="IG Cap :billed_cap:" />
+          <meta property="og:site_name" content="IG Caption Generator" />
           <meta
             property="og:description"
             content="Generate your next IG caption in just seconds."
           />
-          <meta property="og:title" content="IG Cap :billed_cap:" />
+          <meta property="og:title" content="IG Caption Generator" />
           <meta
             name="twitter:description"
             content="Generate your next IG caption in just seconds."
