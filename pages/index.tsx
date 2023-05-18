@@ -338,7 +338,7 @@ function Instagram() {
         )}
 
         <div className="flex flex-1 w-full flex-col items-center justify-center text-center px-4">
-          <div className="max-w-xl w-full">
+          <div className="w-full">
             <div className="flex mt-10 items-center space-x-3">
               <p className="text-left font-medium">
                 Next, give us some context behind this picture{" "}
@@ -350,13 +350,17 @@ function Instagram() {
             </div>
             <textarea
               value={igCaption}
+              minLength={5}
               onChange={(e) => setIgCaption(e.target.value)}
               rows={4}
-              className="w-full rounded-md border-gray-300 shadow-sm my-5 p-4 bg-gray-100 resize-none"
+              className="w-full rounded-md border-gray-300 shadow-sm mt-5 p-4 bg-gray-100 resize-none"
               placeholder={
                 "e.g. I'm a web developer in 2023 and this was me and my wife after I got my first job offer!"
               }
             />
+            {igCaption.length < 5 &&
+              <p className="text-left text-sm mb-5 text-slate-500">Please enter 5 or more characters of context</p>
+            }
             <div className="flex mb-5 items-center space-x-3">
               <p className="text-left font-medium">Finally, select your vibe</p>
             </div>
@@ -369,7 +373,7 @@ function Instagram() {
           </div>
         </div>
 
-        {!capLoading && imageUrl && (
+        {!capLoading && imageUrl && igCaption.length > 4 && (
           <div className="mt-3 flex flex-col items-center justify-center w-full">
             <button
               className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
@@ -396,7 +400,7 @@ function Instagram() {
           toastOptions={{ duration: 2000 }}
         />
 
-        <div className="space-y-10 my-10">
+        <div className="space-y-10 my-10 p-4">
           {generatedCaptions && (
             <>
               <div>
