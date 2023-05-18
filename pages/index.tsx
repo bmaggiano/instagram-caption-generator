@@ -121,6 +121,22 @@ function Instagram() {
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
+    case "Adrian Wojnarowski (Woj)":
+      let wojCaptions = [
+        "ESPN Sources: The Suns have started to gather permission on several assistants for head coaching interviews, including Sacramento’s Jordi Fernandez, Milwaukee’s Charles Lee and Memphis’ Darko Rajakovic.",
+        "BREAKING: The 76ers dismissed coach Doc Rivers on Tuesday, sources tell ESPN. Rivers led the Sixers to the Eastern Conference Semifinals in each of his three seasons on the job.",
+        "Sources: 76ers fire coach Doc Rivers after three seasons - via @ESPNApp"
+      ];
+      prompt = `Write in the style that ESPN Senior NBA Insider ${vibe} does, and pretend you're breaking news to the public. Generate 2 instagram captions with no hashtags and clearly labeled "1." and "2.". Also, here's 3 examples of Adrian Wojnarowski's captions (he's usually one of the sources for breaking news in sports), to base future captions off of: ${
+        wojCaptions[0]
+      } and ${
+        wojCaptions[1]
+      } and ${
+        wojCaptions[2]
+      }. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
     case "Professional":
       prompt = `Generate 2 ${vibe} instagram captions with no hashtags and clearly labeled "1." and "2.". Write in a professional tone, and highlight your achievements and aspirations. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
         igCaption.slice(-1) === "." ? "" : "."
