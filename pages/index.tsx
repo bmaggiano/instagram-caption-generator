@@ -25,11 +25,10 @@ function Instagram() {
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
-    const { getRootProps, getInputProps, isDragActive, files, startUpload } =
+  const { getRootProps, getInputProps, isDragActive, files, startUpload } =
     useUploadThing("imageUploader");
 
-      const userImage =
+  const userImage =
     files.length > 0 && files[files.length - 1]?.contents
       ? files[files.length - 1]?.contents
       : null;
@@ -43,10 +42,10 @@ function Instagram() {
 
   useEffect(() => {
     const imageDescFromStorage = localStorage.getItem("imageDesc");
-    if(imageDescFromStorage) {
-      setPicCaption(imageDescFromStorage)
-    } 
-  }, [])
+    if (imageDescFromStorage) {
+      setPicCaption(imageDescFromStorage);
+    }
+  }, []);
 
   useEffect(() => {
     if (imageUrl !== null) {
@@ -55,11 +54,11 @@ function Instagram() {
   }, [imageUrl]);
 
   const clearStorageAndResetImageUrl = () => {
-    setImageUrl("")
-    setPicCaption(null)
-    localStorage.removeItem("imageUrl")
-    localStorage.removeItem("imageDesc")
-  }
+    setImageUrl("");
+    setPicCaption(null);
+    localStorage.removeItem("imageUrl");
+    localStorage.removeItem("imageDesc");
+  };
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
@@ -77,14 +76,14 @@ function Instagram() {
       const imageUrl = lastMetadata?.fileUrl;
       localStorage.setItem("imageUrl", imageUrl);
       setImageUrl(imageUrl);
-  
+
       if (imageUrl) {
         const data = {
           input: {
             image: imageUrl,
           },
         };
-  
+
         const requestOptions = {
           method: "POST",
           headers: {
@@ -92,7 +91,7 @@ function Instagram() {
           },
           body: JSON.stringify(data),
         };
-  
+
         const res = await fetch("/api/replicate", requestOptions);
         const json = await res.json();
         setPicCaption(json.caption);
@@ -105,7 +104,6 @@ function Instagram() {
       setLoading(false);
     }
   }
-  
 
   let prompt: string;
 
@@ -209,12 +207,11 @@ function Instagram() {
 
       <Header />
 
-      {showAlert && 
-      <div 
-      className="md:w-3/4 p-4"
-      >
-        <AlertDemo />
-      </div>}
+      {showAlert && (
+        <div className="md:w-3/4 p-4">
+          <AlertDemo />
+        </div>
+      )}
 
       <div>
         <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-8">
@@ -224,80 +221,86 @@ function Instagram() {
         </main>
 
         {imageUrl && (
-        <div className="flex items-center justify-end px-4">
-          <div 
-          className="flex items-center space-x-2 bg-gray-100 rounded-xl text-black outline outline-1 outline-gray-300 font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-gray-200 cursor-pointer w-50"
-          onClick={() => {
-            clearStorageAndResetImageUrl()
-          }}
-          >
-            <Image
-            src="/refresh-cw.svg"
-            alt="refresh icon"
-            width={20}
-            height={20}/> <p>New Image</p>
+          <div className="flex items-center justify-end px-4">
+            <div
+              className="flex items-center space-x-2 bg-gray-100 rounded-xl text-black outline outline-1 outline-gray-300 font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-gray-200 cursor-pointer w-50"
+              onClick={() => {
+                clearStorageAndResetImageUrl();
+              }}
+            >
+              <Image
+                src="/refresh-cw.svg"
+                alt="refresh icon"
+                width={20}
+                height={20}
+              />{" "}
+              <p>New Image</p>
             </div>
-        </div>
+          </div>
         )}
 
         <br />
 
         <div className="p-4">
-          
           <div
-        {...getRootProps()}
-        className=" flex items-center justify-center w-full"
-      >
-
-        <label
-          htmlFor="dropzone-file"
-          className="flex flex-col items-center justify-center w-full h-72 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-        >
-<input {...getInputProps()} disabled={!!imageUrl}id="dropzone-file" type="file" accept="image/png, image/jpeg, image/webp, image/apng, image/bmp, image/x-icon" />          {!userImage && !imageUrl && <>Upload Picture Here</>}{" "}
-          {userImage && imageUrl && (
-            <img
-              src={userImage}
-              className="h-2/3 mb-3 text-gray-400"
-              alt="uploaded image"
-            />
-          )}
-          {userImage && !imageUrl && (
-            <img
-              src={userImage}
-              className="h-2/3 mb-3 text-gray-400"
-              alt="uploaded image"
-            />
-          )}
-          {imageUrl && !userImage && (
-            <img
-              src={imageUrl}
-              className="h-2/3 mb-3 text-gray-400"
-              alt="uploaded image"
-            />
-          )}
-        </label>
-      </div>
-
-      {files.length > 0 && (
-        <div className="mt-3 flex flex-col items-center justify-center w-full">
-          {!loading && (
-            <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
-              onClick={async () => {
-                handleImageUploadAndGenerateCaption()
-              }}
+            {...getRootProps()}
+            className=" flex items-center justify-center w-full"
+          >
+            <label
+              htmlFor="dropzone-file"
+              className="flex flex-col items-center justify-center w-full h-72 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
             >
-              Upload image
-            </button>
+              <input
+                {...getInputProps()}
+                disabled={!!imageUrl}
+                id="dropzone-file"
+                type="file"
+                accept="image/png, image/jpeg, image/webp, image/apng, image/bmp, image/x-icon"
+              />{" "}
+              {!userImage && !imageUrl && <>Upload Picture Here</>}{" "}
+              {userImage && imageUrl && (
+                <img
+                  src={userImage}
+                  className="h-2/3 mb-3 text-gray-400"
+                  alt="uploaded image"
+                />
+              )}
+              {userImage && !imageUrl && (
+                <img
+                  src={userImage}
+                  className="h-2/3 mb-3 text-gray-400"
+                  alt="uploaded image"
+                />
+              )}
+              {imageUrl && !userImage && (
+                <img
+                  src={imageUrl}
+                  className="h-2/3 mb-3 text-gray-400"
+                  alt="uploaded image"
+                />
+              )}
+            </label>
+          </div>
+
+          {files.length > 0 && (
+            <div className="mt-3 flex flex-col items-center justify-center w-full">
+              {!loading && (
+                <button
+                  className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50"
+                  onClick={async () => {
+                    handleImageUploadAndGenerateCaption();
+                  }}
+                >
+                  Upload image
+                </button>
+              )}
+              {loading && (
+                <button className="bg-gray-500 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50">
+                  <LoadingDots color="white" style="large" />
+                </button>
+              )}
+            </div>
           )}
-          {loading && (
-            <button className="bg-gray-500 rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-50">
-              <LoadingDots color="white" style="large" />
-            </button>
-          )}
-        </div>
-      )}
-          
         </div>
 
         {!descLoading && imageUrl && (
@@ -310,7 +313,7 @@ function Instagram() {
                     AI Generated description:{" "}
                   </span>
                   <span
-                  className="text-center"
+                    className="text-center"
                     onClick={() => {
                       navigator.clipboard.writeText(picCaption);
                       toast("Caption copied to clipboard", {
@@ -344,7 +347,6 @@ function Instagram() {
                 <span className="text-slate-500">
                   (so we can generate a caption)
                 </span>
-                
               </p>
             </div>
             <textarea
@@ -357,9 +359,11 @@ function Instagram() {
                 "e.g. I'm a web developer in 2023 and this was me and my wife after I got my first job offer!"
               }
             />
-            {igCaption.length < 5 &&
-              <p className="text-left text-sm mb-5 text-slate-500">Please enter 5 or more characters of context</p>
-            }
+            {igCaption.length < 5 && (
+              <p className="text-left text-sm mb-5 text-slate-500">
+                Please enter 5 or more characters of context
+              </p>
+            )}
             <div className="flex mb-5 items-center space-x-3">
               <p className="text-left font-medium">Finally, select your vibe</p>
             </div>
