@@ -138,11 +138,11 @@ function Instagram() {
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
-    case "Donald Trump":
-      prompt = `Generate 2 instagram captions like you're ${vibe} with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
-        igCaption.slice(-1) === "." ? "" : "."
-      }`;
-      break;
+    // case "Donald Trump":
+    //   prompt = `Generate 2 instagram captions like you're ${vibe} with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+    //     igCaption.slice(-1) === "." ? "" : "."
+    //   }`;
+    //   break;
     case "Drake":
       let drakecaptions = [
         "not to get the tea brewing but I wonder how your friend that looks at me with wandering eyes is doing",
@@ -253,8 +253,7 @@ function Instagram() {
           htmlFor="dropzone-file"
           className="flex flex-col items-center justify-center w-full h-72 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
         >
-          <input {...getInputProps()} id="dropzone-file" type="file" accept="image/png, image/jpeg, image/webp, image/apng, image/bmp, image/x-icon" />
-          {!userImage && !imageUrl && <>Upload Picture Here</>}{" "}
+<input {...getInputProps()} disabled={!!imageUrl}id="dropzone-file" type="file" accept="image/png, image/jpeg, image/webp, image/apng, image/bmp, image/x-icon" />          {!userImage && !imageUrl && <>Upload Picture Here</>}{" "}
           {userImage && imageUrl && (
             <img
               src={userImage}
