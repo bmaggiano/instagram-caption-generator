@@ -136,11 +136,11 @@ function Instagram() {
         igCaption.slice(-1) === "." ? "" : "."
       }`;
       break;
-    // case "Donald Trump":
-    //   prompt = `Generate 2 instagram captions like you're ${vibe} with no hashtags and clearly labeled "1." and "2.". Use a bombastic and attention-grabbing tone, and emphasize your accomplishments and strengths. Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
-    //     igCaption.slice(-1) === "." ? "" : "."
-    //   }`;
-    //   break;
+    case "Sports":
+      prompt = `Generate 2 ${vibe} based instagram captions with no hashtags and clearly labeled "1." and "2.". Make sure each generated instagram caption is less than 160 characters, has short sentences that are found in instagram captions, and base them on this picture caption: ${picCaption} and this context: ${igCaption}${
+        igCaption.slice(-1) === "." ? "" : "."
+      }`;
+      break;
     case "Drake":
       let drakecaptions = [
         "not to get the tea brewing but I wonder how your friend that looks at me with wandering eyes is doing",
