@@ -56,6 +56,7 @@ function Instagram() {
   const clearStorageAndResetImageUrl = () => {
     setImageUrl("");
     setPicCaption(null);
+    setIgCaption("")
     localStorage.removeItem("imageUrl");
     localStorage.removeItem("imageDesc");
   };
