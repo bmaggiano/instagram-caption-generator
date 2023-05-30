@@ -1,6 +1,6 @@
 # Instagram Caption Generator
 
-This project generates Instagram captions for you using AI.
+This project generates Instagram captions for you using ChatGPT.
 
 ![Instagram Caption Generator](./public/screenshot.png)
 
