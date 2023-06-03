@@ -7,10 +7,10 @@ import CelebDropDown, { VibeType } from "../components/CelebDropDown";
 import LoadingDots from "../components/LoadingDots";
 import Footer from "../components/Footer";
 import AlertDemo from "../components/Alert";
-import { generateReactHelpers } from "@uploadthing/react";
+import { UploadButton } from "@uploadthing/react";
 import type { OurFileRouter } from "../server/uploadthing";
+import "@uploadthing/react/styles.css"
 
-const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
 function Instagram() {
   const [vibe, setVibe] = useState<VibeType>("Funny");
@@ -25,13 +25,10 @@ function Instagram() {
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { getRootProps, getInputProps, isDragActive, files, startUpload } =
-    useUploadThing("imageUploader");
-
-  const userImage =
-    files.length > 0 && files[files.length - 1]?.contents
-      ? files[files.length - 1]?.contents
-      : null;
+  // const userImage =
+  //   files.length > 0 && files[files.length - 1]?.contents
+  //     ? files[files.length - 1]?.contents
+  //     : null;
 
   useEffect(() => {
     const imageUrlFromStorage = localStorage.getItem("imageUrl");
@@ -72,11 +69,11 @@ function Instagram() {
   async function handleImageUploadAndGenerateCaption() {
     setLoading(true);
     try {
-      const metadata = await startUpload();
-      const lastMetadata = metadata[metadata.length - 1];
-      const imageUrl = lastMetadata?.fileUrl;
-      localStorage.setItem("imageUrl", imageUrl);
-      setImageUrl(imageUrl);
+      // const metadata = await startUpload();
+      // const lastMetadata = metadata[metadata.length - 1];
+      // const imageUrl = lastMetadata?.fileUrl;
+      // localStorage.setItem("imageUrl", imageUrl);
+      // setImageUrl(imageUrl);
 
       if (imageUrl) {
         const data = {
@@ -260,36 +257,36 @@ function Instagram() {
 
         <div className="p-4">
           <div
-            {...getRootProps()}
             className=" flex items-center justify-center w-full"
           >
             <label
               htmlFor="dropzone-file"
               className="flex flex-col items-center justify-center w-full h-72 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
             >
-              <input
-                {...getInputProps()}
-                disabled={!!imageUrl}
-                id="dropzone-file"
-                type="file"
-                accept="image/png, image/jpeg, image/webp, image/apng, image/bmp, image/x-icon"
-              />{" "}
-              {!userImage && !imageUrl && <>Upload Picture Here</>}{" "}
-              {userImage && imageUrl && (
-                <img
-                  src={userImage}
-                  className="h-2/3 mb-3 text-gray-400"
-                  alt="uploaded image"
-                />
-              )}
-              {userImage && !imageUrl && (
-                <img
-                  src={userImage}
-                  className="h-2/3 mb-3 text-gray-400"
-                  alt="uploaded image"
-                />
-              )}
-              {imageUrl && !userImage && (
+              {!imageUrl &&
+        <UploadButton<OurFileRouter>
+        endpoint="imageUploader"
+        onClientUploadComplete={(res) => {
+          // Do something with the response
+          const imageUrl = res?.[0]?.fileUrl;
+          if (imageUrl) {
+            localStorage.setItem("imageUrl", imageUrl);
+            // console.log("Files: ", imageUrl);
+            setImageUrl(imageUrl)
+            return;
+          } else {
+            console.log("No file URL found.");
+            // Handle the case where fileUrl is undefined
+          }
+        }}
+        onUploadError={(error: Error) => {
+          // Do something with the error.
+          alert(`ERROR! ${error.message}`);
+        }}
+      /> 
+              }
+              {/* {!imageUrl && <>Upload Picture Here</>}{" "} */}
+              {imageUrl && (
                 <img
                   src={imageUrl}
                   className="h-2/3 mb-3 text-gray-400"
@@ -299,7 +296,7 @@ function Instagram() {
             </label>
           </div>
 
-          {files.length > 0 && (
+          {imageUrl && (
             <div className="mt-3 flex flex-col items-center justify-center w-full">
               {!loading && (
                 <button
@@ -308,7 +305,7 @@ function Instagram() {
                     handleImageUploadAndGenerateCaption();
                   }}
                 >
-                  Upload image
+                  Generate Caption
                 </button>
               )}
               {loading && (
